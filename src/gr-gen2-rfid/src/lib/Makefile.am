@@ -59,7 +59,8 @@ _rfid_la_SOURCES = 			\
 	rfid.cc				\
 	rfid_clock_recovery_zc_ff.cc	\
 	rfid_cmd_gate.cc		\
-	rfid_gen2_reader.cc		
+	rfid_gen2_reader.cc		\		
+	rfid_reader_decoder.cc
 
 
 
@@ -83,11 +84,12 @@ rfid.cc rfid.py: rfid.i $(ALL_IFILES)
 grinclude_HEADERS =                     \
 	rfid_clock_recovery_zc_ff.cc	\
 	rfid_cmd_gate.cc		\
-	rfid_gen2_reader.cc			
+	rfid_gen2_reader.cc		\
+	rfid_reader_decoder.cc			
 
 # These swig headers get installed in ${prefix}/include/gnuradio/swig
-swiginclude_HEADERS = 			\
-	$(LOCAL_IFILES)			
+#swiginclude_HEADERS = 			\
+#	$(LOCAL_IFILES)			
 
 # Don't distribute output of swig
 dist-hook:
