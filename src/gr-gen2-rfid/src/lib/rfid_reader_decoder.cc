@@ -10,6 +10,7 @@
 #include <sys/time.h>
 #include <float.h>
 
+
 rfid_reader_decoder_sptr
 rfid_make_reader_decoder (float us_per_sample, float tari)
 {
@@ -27,6 +28,7 @@ rfid_reader_decoder::rfid_reader_decoder(float us_per_sample, float tari)
   log_q = gr_make_msg_queue(100000);
   d_delim_width = (int)((1 / d_us_per_sample) * 12.5);
   d_max_tari = (int)((1 / d_us_per_sample) * 30);
+  d_min_amp_thresh = MIN_AMP_THRESH;
   
   //Valid TARIs are [6.25, 25]us. Specifying your reader's TARI helps filter mistakes in decoding, as 
   // both the delim and TARI will need to match.
@@ -50,6 +52,23 @@ rfid_reader_decoder::rfid_reader_decoder(float us_per_sample, float tari)
   d_avg_amp = 0;
 
   advance_decoder(BEGIN);
+
+  //Write start time to log file
+  char tmp_str[10000];
+  timeval time;
+  gettimeofday(&time, NULL);
+  char * s = ctime(&time.tv_sec);
+      
+  int str_len = sprintf(tmp_str, "###%s", s);
+      
+  gr_message_sptr log_msg =  gr_make_message(START,
+					       0,
+					       0,
+					       str_len); 
+  memcpy(log_msg->msg(), tmp_str, str_len);
+  log_q->insert_tail(log_msg);
+
+
 }
 
 
@@ -97,7 +116,7 @@ int rfid_reader_decoder::work(int noutput_items,
 
     case BEGIN:
       
-      if (is_negative_edge(in[i]) && !neg_edge_found){
+      if (is_negative_edge(in[i]) && !neg_edge_found && d_avg_amp > d_min_amp_thresh ){
 	d_command_count = 0;               //Begin tracking command duration
 	neg_edge_found = true;
 	
@@ -296,12 +315,19 @@ rfid_reader_decoder::log_event(int event, int lag_samples){
 
   if(event == POWER_DOWN && last_event != POWER_DOWN){
     float interarrival = (d_interarrival_count - lag_samples) * d_us_per_sample;
+    timeval time;
+    gettimeofday(&time, NULL);
+    tm * now = localtime(&time.tv_sec);
+
+    char tmp_str[10000];
+    int str_len = sprintf(tmp_str, "CMD:PWR_DWN,INTERARRIVAL:%f,TIME:%d:%d:%d.%ld", interarrival, now->tm_hour, now->tm_min, now->tm_sec, time.tv_usec / 1000);
 
     gr_message_sptr log_msg =  gr_make_message(POWER_DOWN,
-					     interarrival,
-					     0,
-					     0); 
+					       0,
+					       0,
+					       str_len); 
 
+    memcpy(log_msg->msg(), tmp_str, str_len);
     log_q->insert_tail(log_msg);
   
     d_interarrival_count = lag_samples;  //For next command, interrarrival time is from beginning of power down.
@@ -327,6 +353,9 @@ rfid_reader_decoder::log_event(int event, int lag_samples){
 					       0,
 					       str_len); 
     memcpy(log_msg->msg(), tmp_str, str_len);
+    if(log_q->full_p()){
+      printf("Message log is full. Blocking\n");
+    }
     log_q->insert_tail(log_msg);
   }
   
@@ -334,16 +363,3 @@ rfid_reader_decoder::log_event(int event, int lag_samples){
 
 }
 
-// void
-// rfid_reader_decoder::log_power_down(int lag_samples){
-//   float interarrival = (d_interarrival_count - lag_samples) * d_us_per_sample;
-
-//   gr_message_sptr log_msg =  gr_make_message(POWER_DOWN,
-// 					     interarrival,
-// 					     0,
-// 					     0); 
-
-//   log_q->insert_tail(log_msg);
-  
-//   d_interarrival_count = lag_samples;  //For next command, interrarrival time is from beginning of power down.
-// }

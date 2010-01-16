@@ -24,10 +24,11 @@ class rfid_reader_decoder : public gr_sync_block
   rfid_make_reader_decoder (float us_per_sample, float tari);
  
   enum {BEGIN, DELIM_FOUND, TARI_FOUND, RTCAL_FOUND, DATA};
-  enum {READER_COMMAND, POWER_DOWN};
+  enum {READER_COMMAND, POWER_DOWN, START};
   float static const AVG_WIN = 750; // Window to average amplitude over, in us
   float static const THRESH_FRACTION = 0.90; //Percent of avg amplitude to detect edges
   int static const MAX_BITS = 256;  
+  double static const MIN_AMP_THRESH = 1;     //Eventually, expose as user parameter
 
   double d_us_per_sample;
   int d_delim_width;          //Length of start delimiter, in samples
@@ -37,6 +38,7 @@ class rfid_reader_decoder : public gr_sync_block
   int d_window_length;        //Length of window
   int d_window_index;         //Index to oldest sample
   double d_avg_amp;           //Average amplitude over window
+  double d_min_amp_thresh;    //To filter out nearby readers
   double d_thresh;            //Amplitude threshold for detecing edges
   int d_high_count, d_low_count, d_command_count, d_interarrival_count; //Sample counters
   bool neg_edge_found;        //True if found negative edge for bit
@@ -54,9 +56,7 @@ class rfid_reader_decoder : public gr_sync_block
   bool is_negative_edge(float sample);
   bool is_positive_edge(float sample);
   void log_event(int event, int lag_samples);
-  //void log_command(int lag_samples);
-  //void log_power_down(int lag_samples);
-
+ 
  public:
   ~rfid_reader_decoder();
   gr_msg_queue_sptr log_q;
