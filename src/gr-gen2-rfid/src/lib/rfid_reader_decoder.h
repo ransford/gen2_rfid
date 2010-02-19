@@ -26,9 +26,9 @@ class rfid_reader_decoder : public gr_sync_block
   enum {BEGIN, DELIM_FOUND, TARI_FOUND, RTCAL_FOUND, DATA};
   enum {READER_COMMAND, POWER_DOWN, START};
   float static const AVG_WIN = 750; // Window to average amplitude over, in us
-  float static const THRESH_FRACTION = 0.90; //Percent of avg amplitude to detect edges
+  float static const THRESH_FRACTION = 0.9; //Percent of avg amplitude to detect edges
   int static const MAX_BITS = 256;  
-  double static const MIN_AMP_THRESH = 1;     //Eventually, expose as user parameter
+  double static const MIN_AMP_THRESH = 0;     //Eventually, expose as user parameter
 
   double d_us_per_sample;
   int d_delim_width;          //Length of start delimiter, in samples

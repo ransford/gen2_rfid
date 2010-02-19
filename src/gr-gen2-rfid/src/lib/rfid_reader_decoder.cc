@@ -320,7 +320,7 @@ rfid_reader_decoder::log_event(int event, int lag_samples){
     tm * now = localtime(&time.tv_sec);
 
     char tmp_str[10000];
-    int str_len = sprintf(tmp_str, "CMD:PWR_DWN,INTERARRIVAL:%f,TIME:%d:%d:%d.%.6ld", interarrival, now->tm_hour, now->tm_min, now->tm_sec, time.tv_usec);
+    int str_len = sprintf(tmp_str, "DECODED:PWR_DWN,INTERARRIVAL:%f,TIME:%d:%d:%d.%.6ld", interarrival, now->tm_hour, now->tm_min, now->tm_sec, time.tv_usec);
 
     gr_message_sptr log_msg =  gr_make_message(POWER_DOWN,
 					       0,
