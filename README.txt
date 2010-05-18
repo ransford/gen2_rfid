@@ -1,3 +1,7 @@
+There are two sub-projects in this repository. First, is a Gen 2
+monitoring platform built on the USRP2, which is generally referred to
+as "reader-decoder". Second is the Gen 2 RFID reader. These notes will install both, and the two python applications are found in the "src/app" directory.
+
 Tested on:
   Ubuntu 8.10 64-bit (2.6.27-3-rt)
   GNU Radio revision 11059
@@ -5,10 +9,12 @@ Tested on:
 
 
 Hardware:
-	USRP, two 900 MHZ daughterboards with the ISM filters removed (see
-	endnote)
-	Two antennas, preferably directional. Attach to TX/RX ports on
-	the daughterboards
+	Reader-Decoder: 
+		USRP2, one 900 MHZ daughterboard
+		Antenna, preferably directional, attached to TX/RX port
+	Gen2_Reader:
+		USRP1, two 900 MHZ daughterboards with the ISM filters removed
+		Two antennas, preferably directional. Attach to TX/RX ports
 
 	
 	
@@ -27,9 +33,13 @@ First:
 6. Make sure gen2_rfid was configured
 7. make;sudo make install
 8. Copy src/misc_files/gen2_reader.rbf to /usr/local/share/usrp/rev4
-9. Run sudo GR_SCHEDULER=STS nice -n -20 ./gen2_reader.py
-10. Press 'a' and enter to print out the log
 
+Reader-Decoder:
+   Run sudo nice -n -20 ./reader_decoder.py
+Gen 2 Reader:
+   Run sudo GR_SCHEDULER=STS nice -n -20 ./gen2_reader.py
+
+----The following notes apply only to the Gen 2 Reader. ----
 
 Reliably meeting the timing requirements of the Gen 2 protocol is
 difficult using the standard USRP/GNURadio configuration. This is
