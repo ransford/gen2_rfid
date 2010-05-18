@@ -1,6 +1,8 @@
 There are two sub-projects in this repository. First, is a Gen 2
 monitoring platform built on the USRP2, which is generally referred to
-as "reader-decoder". Second is the Gen 2 RFID reader. These notes will install both, and the two python applications are found in the "src/app" directory.
+as "reader-decoder". Second is the Gen 2 RFID reader built on the
+USRP1. These isntall notes will install both, and the two python applications
+are found in the "src/app" directory.  
 
 Tested on:
   Ubuntu 8.10 64-bit (2.6.27-3-rt)
