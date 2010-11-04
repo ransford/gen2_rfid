@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <float.h>
 #include <string.h>
+#include <cstdio>
 
 #ifndef READER_VARS
 #include "reader_vars.h"

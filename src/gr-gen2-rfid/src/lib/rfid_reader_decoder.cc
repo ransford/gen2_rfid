@@ -9,7 +9,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <float.h>
-
+#include <cstdio>
 
 rfid_reader_decoder_sptr
 rfid_make_reader_decoder (float us_per_sample, float tari)
