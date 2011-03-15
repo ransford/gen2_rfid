@@ -1,0 +1,56 @@
+There are two projects in this repository. First is a Gen 2
+monitoring platform built on the USRP2, which is referred to
+as "gen2_monitor". This decodes and logs all Gen 2 reader traffic in the
+Gen 2 band. The USRP1 can be used for the gen2_monitor application, but it
+will only capture traffic in an 8 MHz band instead of the full 25
+MHz. The second project is a Gen 2 RFID reader built on the USRP1. This project can read commercial Gen 2 tags, yet the complete MAC and PHY is implemented in GNU Radio. 
+
+These install notes will install both, and the two python applications are found in the "rfid/apps" directory. 
+
+
+Tested on:
+  Ubuntu 10.10 64-bit (2.6.35-27-generic)
+  GNU Radio git commit 26fc07eac6a3029e2d7361b1502f69e7592e708b
+ 
+
+Hardware:
+	gen2_monitor: 
+		USRP2, one 900 MHZ daughterboard
+		Antenna, preferably directional, attached to TX/RX port
+	gen2_reader:
+		USRP1, two 900 MHZ daughterboards
+		Two antennas, preferably directional. Attach to TX/RX ports
+
+	
+	
+Install:
+1. Download/build/install gnuradio, and the Universal Hardware Driver (UHD). 
+2. In ./rfid, './bootstrap; ./configure; ./make; ./sudo make install'
+3. In ./rfid/apps, 'sudo GR_SCHEDULER=STS nice -n -20 ./gen2_reader.py'
+   (or gen2_monitor.py)
+
+----The following notes apply only to the Gen 2 Reader. ----
+
+Reliably meeting the timing requirements of the Gen 2 protocol is
+difficult using the standard USRP/GNURadio configuration. This is
+because the default behavior is to look at the signal processing
+graph, determine the maximum amount of samples that it can consumed,
+and then block on the USRP until that maximum is received before
+scheduling the flowgraph. To meet the timing requirements you need to modify the scheduler behavior so that at every call to the USB subsystem whatever samples are available are immediately passed to the application.  I have included files that make this modification: 
+
+./rfid/misc_files/usrp_source_base.cc needs to be copied to gr-usrp/src/
+
+./rfid/misc_files/fusb_linux.cc needs to be copied to usrp/host/lib/
+
+This should result in gen2_reader.py having latency ~200-300 us. Check
+out the files to see how it works. Note that you will be overwriting
+the standard files of GNU Radio. In general, the modified files should
+work as well as or better than the standard mechanism. 
+
+For more details on the applications, see:
+gen2_monitor: http://www.cs.washington.edu/homes/buettner/docs/p42-2v40n3k-buettnerA.pdf
+
+gen2_reader: http://www.cs.washington.edu/homes/buettner/docs/buettner_gen2_reader.pdf
+
+-- Questions?  
+   Michael Buettner (buettner@cs.washington.edu)

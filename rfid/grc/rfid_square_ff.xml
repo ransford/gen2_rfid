@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<block>
+  <name>Square</name>
+  <key>rfid_square_ff</key>
+  <category>RFID</category>
+  <import>import rfid</import>
+  <make>rfid.square_ff()</make>
+
+  <sink>
+    <name>in</name>
+    <type>float</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>
