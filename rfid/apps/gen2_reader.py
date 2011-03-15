@@ -20,7 +20,7 @@ class my_top_block(gr.top_block):
     def __init__(self):
         gr.top_block.__init__(self)
            
-        amplitude = 2000
+        amplitude = 5000
 
         filt_out = gr.file_sink(gr.sizeof_gr_complex, "./filt.out")
         ffilt_out = gr.file_sink(gr.sizeof_float, "./ffilt.out")
