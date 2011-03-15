@@ -3,9 +3,12 @@ monitoring platform built on the USRP2, which is referred to
 as "gen2_monitor". This decodes and logs all Gen 2 reader traffic in the
 Gen 2 band. The USRP1 can be used for the gen2_monitor application, but it
 will only capture traffic in an 8 MHz band instead of the full 25
-MHz. The second project is a Gen 2 RFID reader built on the USRP1. This project can read commercial Gen 2 tags, yet the complete MAC and PHY is implemented in GNU Radio. 
+MHz. The second project is a Gen 2 RFID reader built on the USRP1. This 
+project can read commercial Gen 2 tags, yet the complete MAC and PHY is 
+implemented in GNU Radio.  
 
-These install notes will install both, and the two python applications are found in the "rfid/apps" directory. 
+These install notes will install both, and the two python applications are 
+found in the "rfid/apps" directory. 
 
 
 Tested on:
@@ -36,7 +39,10 @@ difficult using the standard USRP/GNURadio configuration. This is
 because the default behavior is to look at the signal processing
 graph, determine the maximum amount of samples that it can consumed,
 and then block on the USRP until that maximum is received before
-scheduling the flowgraph. To meet the timing requirements you need to modify the scheduler behavior so that at every call to the USB subsystem whatever samples are available are immediately passed to the application.  I have included files that make this modification: 
+scheduling the flowgraph. To meet the timing requirements you need to 
+modify the scheduler behavior so that at every call to the USB subsystem 
+whatever samples are available are immediately passed to the application. 
+I have included files that make this modification: 
 
 ./rfid/misc_files/usrp_source_base.cc needs to be copied to gr-usrp/src/
 
