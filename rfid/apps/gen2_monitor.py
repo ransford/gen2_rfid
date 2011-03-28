@@ -1,13 +1,15 @@
-#!/usr/bin/env pytho
+#!/usr/bin/env python
 #Developed by: Michael Buettner (buettner@cs.washington.edu)
 
-from gnuradio import gr, gru, rfid
+from gnuradio import gr, gru
 from gnuradio import usrp2
 
 from gnuradio.eng_option import eng_option
 from string import split
 import math
 from threading import Timer
+
+import rfid
 
 PRINT_TO_SCREEN = False
 LOG_INTERVAL = 1
