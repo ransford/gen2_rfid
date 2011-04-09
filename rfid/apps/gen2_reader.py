@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #Developed by: Michael Buettner (buettner@cs.washington.edu)
 
-from gnuradio import gr, gru, uhd
+from gnuradio import gr, gru
 from gnuradio import usrp
 from gnuradio import eng_notation
 from gnuradio.eng_option import eng_option
@@ -117,7 +117,7 @@ class my_top_block(gr.top_block):
 
         
         self.connect(matched_filt, filt_out)
-        self.connect(mm, ffilt_out)
+        #self.connect(mm, ffilt_out)
 
         
 
