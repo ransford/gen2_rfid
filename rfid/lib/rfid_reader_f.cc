@@ -97,7 +97,7 @@ rfid_reader_f::rfid_reader_f (int sample_rate)
    memcpy(d_CMD, CMD, 5);
    char DR[2] = "0";
    memcpy(d_DR, DR, 2);
-   char M[3] = "11";
+   char M[3] = "10";
    memcpy(d_M, M, 3);
    char tr_ext[2] = "1";
    memcpy(d_tr_ext, tr_ext, 2);
