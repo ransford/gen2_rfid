@@ -29,7 +29,8 @@ Hardware:
 Install:
 1. Download/build/install gnuradio, and the Universal Hardware Driver (UHD). 
 2. In ./rfid, './bootstrap; ./configure; ./make; ./sudo make install'
-3. In ./rfid/apps, 'sudo GR_SCHEDULER=STS nice -n -20 ./gen2_reader.py'
+3. sudo ldconfig
+4. In ./rfid/apps, 'sudo GR_SCHEDULER=STS nice -n -20 ./gen2_reader.py'
    (or gen2_monitor.py)
 
 ----The following notes apply only to the Gen 2 Reader. ----
@@ -44,11 +45,11 @@ modify the scheduler behavior so that at every call to the USB subsystem
 whatever samples are available are immediately passed to the application. 
 I have included files that make this modification: 
 
-./rfid/misc_files/usrp_source_base.cc needs to be copied to gr-usrp/src/
+./rfid/misc_files/usrp_source_base.cc needs to be copied to gnuradio/gr-usrp/src/
 
-./rfid/misc_files/fusb_linux.cc needs to be copied to usrp/host/lib/
+./rfid/misc_files/fusb_linux.cc needs to be copied to gnuradio/usrp/host/lib/
 
-This should result in gen2_reader.py having latency ~200-300 us. Check
+Once you rebuild gnuradio, this should result in gen2_reader.py having latency ~200-300 us. Check
 out the files to see how it works. Note that you will be overwriting
 the standard files of GNU Radio. In general, the modified files should
 work as well as or better than the standard mechanism. 
