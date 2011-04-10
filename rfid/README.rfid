@@ -35,24 +35,39 @@ Install:
 
 ----The following notes apply only to the Gen 2 Reader. ----
 
-Reliably meeting the timing requirements of the Gen 2 protocol is
-difficult using the standard USRP/GNURadio configuration. This is
-because the default behavior is to look at the signal processing
-graph, determine the maximum amount of samples that it can consumed,
-and then block on the USRP until that maximum is received before
-scheduling the flowgraph. To meet the timing requirements you need to 
-modify the scheduler behavior so that at every call to the USB subsystem 
-whatever samples are available are immediately passed to the application. 
-I have included files that make this modification: 
+Reducing Latency:
 
-./rfid/misc_files/usrp_source_base.cc needs to be copied to gnuradio/gr-usrp/src/
+	 Reliably meeting the timing requirements of the Gen 2 protocol is
+	 difficult using the standard USRP/GNURadio configuration. This is
+	 because the default behavior is to look at the signal processing
+	 graph, determine the maximum amount of samples that it can consumed,
+	 and then block on the USRP until that maximum is received before
+	 scheduling the flowgraph. To meet the timing requirements you need to 
+	 modify the scheduler behavior so that at every call to the USB subsystem 
+	 whatever samples are available are immediately passed to the application. 
+	 I have included files that make this modification: 
+	 
+	 ./rfid/misc_files/usrp_source_base.cc needs to be copied to gnuradio/gr-usrp/src/
 
-./rfid/misc_files/fusb_linux.cc needs to be copied to gnuradio/usrp/host/lib/
+	 ./rfid/misc_files/fusb_linux.cc needs to be copied to gnuradio/usrp/host/lib/
 
-Once you rebuild gnuradio, this should result in gen2_reader.py having latency ~200-300 us. Check
-out the files to see how it works. Note that you will be overwriting
-the standard files of GNU Radio. In general, the modified files should
-work as well as or better than the standard mechanism. 
+	 Once you rebuild gnuradio, this should result in gen2_reader.py having latency
+	 ~200-300 us. Check out the files to see how it works. Note that you will be 
+	 overwriting the standard files of GNU Radio. In general, the modified files should
+	 work as well as or better than the standard mechanism. 
+
+
+Increasing Transmit Power:
+	 The RFX900 daughterboards have a 250 mW transmit power. With simple hardware 
+	 modifications, removing the ISM band filter, this can be increased to 500 mW. 
+	 You can find details for this in the gnuradio mailing list. 
+
+
+Debugging:
+	A key to debugging the reader code is looking at the signal traces. gen2_reader.py
+        shows examples of how you can pipe the output of any block to a file. These can
+        be read into Matlab/Octave using guradio/gnuradio-core/src/utils/read_complex_binary.m.
+	Examples of what you should see can be found in rfid/misc_files. 
 
 For more details on the applications, see:
 gen2_monitor: http://www.cs.washington.edu/homes/buettner/docs/p42-2v40n3k-buettnerA.pdf
