@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 #Developed by: Michael Buettner (buettner@cs.washington.edu)
+#Note: To use this application with the WISP, you will need to modify
+#      rfid_global_vars.h. Look for the WISP comments, uncomment those, and
+#      comment out the 40 kHz settings.
 
 from gnuradio import gr, gru
 from gnuradio import usrp
