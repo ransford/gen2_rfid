@@ -45,8 +45,8 @@ class reader_monitor(gr.top_block):
 
         if(debug_on):
             self.sink = gr.file_sink(gr.sizeof_float, "rm.out")
-            self.signal_sink = gr.file_sink(gr.sizeof_float, "rm_signal.out")
-            self.connect(self.smooth, self.signal_sink)
+            #self.signal_sink = gr.file_sink(gr.sizeof_float, "rm_signal.out")
+            #self.connect(self.smooth, self.signal_sink)
 
         else:
             self.sink = gr.null_sink(gr.sizeof_float)
