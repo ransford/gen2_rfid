@@ -14,6 +14,14 @@ import rfid
 PRINT_TO_SCREEN = False
 LOG_INTERVAL = 1
 
+#If DEBUG = True the program will output two traces of the signal
+#rm_signal.out shows the signal being fed into the block that decodes the 
+# reader commands.
+#rm_thresh.out shows the threshold that the block is using for detecting
+# positive/negative edges in the reader signal. Use this for debugging.
+#Plot them in Matlab using read_complex_binary.m (in gnuradio tree) 
+DEBUG = True
+
 class reader_monitor(gr.top_block):
     def __init__(self, u, center_freq, hw_dec_rate, downsample_rate, pulse_width, tari, debug_on):
         gr.top_block.__init__(self)
@@ -44,9 +52,9 @@ class reader_monitor(gr.top_block):
         self.rd = rfid.reader_decoder(us_per_sample, tari)
 
         if(debug_on):
-            self.sink = gr.file_sink(gr.sizeof_float, "rm.out")
-            #self.signal_sink = gr.file_sink(gr.sizeof_float, "rm_signal.out")
-            #self.connect(self.smooth, self.signal_sink)
+            self.sink = gr.file_sink(gr.sizeof_float, "rm_thresh.out")
+            self.signal_sink = gr.file_sink(gr.sizeof_float, "rm_signal.out")
+            self.connect(self.smooth, self.signal_sink)
 
         else:
             self.sink = gr.null_sink(gr.sizeof_float)
@@ -94,7 +102,7 @@ def main():
     u  = usrp2.source_32fc()
     
     
-    rm = reader_monitor(u, center_freq, hw_dec_rate, downsample_rate, pulse_width, tari, True)
+    rm = reader_monitor(u, center_freq, hw_dec_rate, downsample_rate, pulse_width, tari, DEBUG)
 
     x = gr.enable_realtime_scheduling()
     if x != gr.RT_OK:
