@@ -232,11 +232,11 @@ int rfid_reader_decoder::work(int noutput_items,
 	    }
 	    else if(d_high_count + d_low_count  > d_pivot){  //Data-1
 	      d_bits[d_len_bits++] = '1';
-	      out[i] = out[i] + 10;
+
 	    }
 	    else{  //Data-0
 	      d_bits[d_len_bits++] = '0';
-	      out[i] = out[i] - 10;
+
 	    }
 	    advance_decoder(DATA);
 	  }
@@ -268,11 +268,9 @@ int rfid_reader_decoder::work(int noutput_items,
 	if(is_positive_edge(in[i])){
 	  if(d_high_count + d_low_count > d_pivot){// Data-1
 	    d_bits[d_len_bits++] = '1';
-	    out[i] = out[i] + 10;
 	  }
 	  else{             //data-0
 	    d_bits[d_len_bits++] = '0';
-	    out[i] = out[i] - 10;
 	  }
 	  advance_decoder(DATA);
 	}
