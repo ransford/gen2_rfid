@@ -108,7 +108,7 @@ int rfid_reader_decoder::work(int noutput_items,
 
     d_thresh = d_avg_amp * THRESH_FRACTION;  //Threshold for detecting negative/positive edges
 
-    out[i] = in[i];
+    out[i] = d_thresh;
 
     d_command_count++;         //Tracks length of this command
     d_interarrival_count++;    //Tracks time from end of last command to start of this command
@@ -268,9 +268,11 @@ int rfid_reader_decoder::work(int noutput_items,
 	if(is_positive_edge(in[i])){
 	  if(d_high_count + d_low_count > d_pivot){// Data-1
 	    d_bits[d_len_bits++] = '1';
+
 	  }
 	  else{             //data-0
 	    d_bits[d_len_bits++] = '0';
+
 	  }
 	  advance_decoder(DATA);
 	}
