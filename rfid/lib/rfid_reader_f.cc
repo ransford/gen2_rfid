@@ -413,7 +413,7 @@ rfid_reader_f::start_cycle(){
    global_reader_state->cur_slot = 1;
    global_reader_state->cur_round++;
 
-
+   global_reader_state->num_bits_decoded = 0;
    global_reader_state->num_bits_to_decode = no_RN16_bits;
    set_num_samples_to_ungate();
 
@@ -512,6 +512,7 @@ rfid_reader_f::start_cycle(){
    out_q->insert_tail(qrep_msg);
 
    global_reader_state->num_bits_to_decode = no_RN16_bits;
+   global_reader_state->num_bits_decoded = 0;
    set_num_samples_to_ungate();
 
    int tail_cw;
@@ -575,6 +576,7 @@ rfid_reader_f::send_req_rn(){
    out_q->insert_tail(cw_msg);
 
    global_reader_state->num_bits_to_decode = no_RN16_bits;
+   global_reader_state->num_bits_decoded = 0;
    set_num_samples_to_ungate();
 
 }
@@ -623,6 +625,7 @@ rfid_reader_f::send_read(){
    out_q->insert_tail(cw_msg);
 
    global_reader_state->num_bits_to_decode = no_DATA_bits;
+   global_reader_state->num_bits_decoded = 0;
    set_num_samples_to_ungate();
 
 }
@@ -712,6 +715,7 @@ rfid_reader_f::send_read(){
 
    
    global_reader_state->num_bits_to_decode = no_EPC_bits;
+   global_reader_state->num_bits_decoded = 0;
    set_num_samples_to_ungate();
 
    int tail_cw;
