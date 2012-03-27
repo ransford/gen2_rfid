@@ -77,7 +77,7 @@ class my_top_block(gr.top_block):
         freq = 915e6
         rx_gain = 20  
     
-        tx = usrp.sink_c(fusb_block_size = 512, fusb_nblocks=8)
+        tx = usrp.sink_c(fusb_block_size = 1024, fusb_nblocks=8)
         tx.set_interp_rate(interp_rate)
         tx_subdev = (0,0)
         tx.set_mux(usrp.determine_tx_mux_value(tx, tx_subdev))
@@ -90,7 +90,7 @@ class my_top_block(gr.top_block):
 #End TX
              
 #RX
-        rx = usrp.source_c(0, dec_rate, fusb_block_size = 512, fusb_nblocks = 8)
+        rx = usrp.source_c(0, dec_rate, fusb_block_size = 512 * 4, fusb_nblocks = 16)
         rx_subdev_spec = (1,0)
         rx.set_mux(usrp.determine_rx_mux_value(rx, rx_subdev_spec))
         rx_subdev = usrp.selected_subdev(rx, rx_subdev_spec)
@@ -108,7 +108,7 @@ class my_top_block(gr.top_block):
 
         command_gate.set_ctrl_out(self.reader.ctrl_q())
         tag_decoder.set_ctrl_out(self.reader.ctrl_q())
-
+        agc2 = gr.agc2_ff(0.3, 1e-3, 1, 1, 100) 
 
 
 #########Build Graph
@@ -116,7 +116,7 @@ class my_top_block(gr.top_block):
         self.connect(matched_filt, command_gate)
         self.connect(command_gate, agc)
         self.connect(agc, to_mag) 
-        self.connect(to_mag, center, mm, tag_decoder)
+        self.connect(to_mag, center, agc2, mm, tag_decoder)
         self.connect(tag_decoder, self.reader, amp, to_complex, tx);
 #################
 
